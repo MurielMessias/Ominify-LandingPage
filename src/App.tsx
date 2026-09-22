@@ -9,6 +9,7 @@ import {
   Home,
   Instagram,
   Laptop,
+  MapPin,
   Mail,
   Menu,
   MessageCircle,
@@ -27,6 +28,11 @@ import TermsPage from '@/pages/TermsPage';
 const cleaningImage = 'https://images.pexels.com/photos/9462192/pexels-photo-9462192.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
 const repairImage = 'https://images.pexels.com/photos/5691503/pexels-photo-5691503.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
 const beautyImage = 'https://images.pexels.com/photos/5584461/pexels-photo-5584461.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
+const anaProfileImage = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&h=180&q=85';
+const rafaelProfileImage = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=180&h=180&q=85';
+const camilaProfileImage = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&h=180&q=85';
+const julianaProfileImage = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=180&h=180&q=85';
+const brunoProfileImage = 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=180&h=180&q=85';
 
 const categories: [string, LucideIcon][] = [
   ['Construção e Reforma', Wrench],
@@ -52,18 +58,59 @@ const faqs: [string, string][] = [
   ['O aplicativo é gratuito para baixar?', 'O Ominify foi pensado para ser simples de começar. Consulte as condições atuais diretamente no aplicativo.'],
 ];
 
+const testimonials = [
+  { name: 'Ana Martins', kind: 'Cliente', role: 'Cliente Ominify', image: anaProfileImage, text: 'Eu precisava de uma ajuda rápida em casa e gostei de poder comparar as opções antes de chamar alguém. A experiência ficou muito mais simples.' },
+  { name: 'Rafael Souza', kind: 'Profissional', role: 'Eletricista e montador', image: rafaelProfileImage, text: 'Ter um espaço para mostrar meu trabalho ajuda as pessoas a entenderem exatamente o que eu faço e facilita o primeiro contato.' },
+  { name: 'Camila Ferreira', kind: 'Cliente', role: 'Cliente Ominify', image: camilaProfileImage, text: 'Quando procuro um serviço, quero praticidade e clareza. Encontrar profissionais por perto deixa tudo mais tranquilo.' },
+  { name: 'Juliana Costa', kind: 'Profissional', role: 'Manicure e designer de unhas', image: julianaProfileImage, text: 'O perfil profissional é uma forma de apresentar meu trabalho com mais cuidado e alcançar pessoas que realmente procuram o meu serviço.' },
+  { name: 'Bruno Almeida', kind: 'Cliente', role: 'Cliente Ominify', image: brunoProfileImage, text: 'A ideia de reunir vários serviços em um só lugar faz sentido para a rotina. Menos tempo procurando, mais tempo resolvendo.' },
+];
+
+const appNotifications: { title: string; detail: string; Icon: LucideIcon; tone: 'green' | 'pink' | 'blue' }[] = [
+  { title: 'Profissional perto de você', detail: 'Encontramos 6 opções na sua região', Icon: MapPin, tone: 'blue' },
+  { title: 'Pagamento feito com sucesso', detail: 'Seu serviço está confirmado', Icon: CircleCheck, tone: 'green' },
+  { title: 'Pedido enviado', detail: 'Aguarde o retorno do profissional', Icon: MessageCircle, tone: 'pink' },
+  { title: 'Nova oportunidade', detail: 'Um cliente procura seu serviço', Icon: Users, tone: 'pink' },
+];
+
 type Page = 'home' | 'privacy' | 'terms';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [page, setPage] = useState<Page>('home');
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [testimonialPaused, setTestimonialPaused] = useState(false);
+  const [notificationIndex, setNotificationIndex] = useState(0);
 
   const closeMenu = () => setMenuOpen(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page]);
+
+  useEffect(() => {
+    if (testimonialPaused) return undefined;
+
+    const rotation = window.setInterval(() => {
+      setActiveTestimonial((current) => (current + 1) % testimonials.length);
+    }, 8000);
+
+    return () => window.clearInterval(rotation);
+  }, [testimonialPaused]);
+
+  useEffect(() => {
+    const rotation = window.setInterval(() => {
+      setNotificationIndex((current) => (current + 1) % appNotifications.length);
+    }, 5000);
+
+    return () => window.clearInterval(rotation);
+  }, []);
+
+  const activeNotification = appNotifications[notificationIndex];
+  const nextNotification = appNotifications[(notificationIndex + 1) % appNotifications.length];
+  const ActiveNotificationIcon = activeNotification.Icon;
+  const NextNotificationIcon = nextNotification.Icon;
 
   if (page === 'privacy') return <PrivacyPage onBack={() => setPage('home')} />;
   if (page === 'terms') return <TermsPage onBack={() => setPage('home')} />;
@@ -117,8 +164,8 @@ function App() {
                   <div className="app-bottom"><span className="active"><Home size={17} />Início</span><span><Search size={17} />Buscar</span><span><MessageCircle size={17} />Conversas</span><span><Users size={17} />Perfil</span></div>
                 </div>
               </div>
-              <div className="float-card float-top"><span className="float-icon"><CircleCheck size={16} /></span><span><strong>Pedido enviado</strong><small>Agora mesmo</small></span></div>
-              <div className="float-card float-bottom"><span className="float-icon pink"><Users size={16} /></span><span><strong>+ oportunidade</strong><small>para o seu negócio</small></span></div>
+              <div className={`float-card float-top notification-layout-${notificationIndex % 3} ${activeNotification.tone}`} key={`top-${notificationIndex}`}><span className="float-icon"><ActiveNotificationIcon size={16} /></span><span><strong>{activeNotification.title}</strong><small>{activeNotification.detail}</small></span></div>
+              <div className={`float-card float-bottom notification-layout-${notificationIndex % 3} ${nextNotification.tone}`} key={`bottom-${notificationIndex}`}><span className="float-icon"><NextNotificationIcon size={16} /></span><span><strong>{nextNotification.title}</strong><small>{nextNotification.detail}</small></span></div>
             </div>
           </div>
           <div className="container hero-peek"><span>Tudo o que você precisa está a um clique.</span><span className="peek-arrow"><ArrowRight size={16} /></span></div>
@@ -155,7 +202,7 @@ function App() {
                 ['05', 'Uma rede de oportunidades perto de você', Star],
               ] as [string, string, LucideIcon][]).map(([n, text, Icon]) => <div className="benefit-row" key={n}><span>{n}</span><Icon size={21} /><strong>{text}</strong><ArrowRight size={17} /></div>)}</div></div></section>
 
-        <section className="social-section"><div className="container social-inner"><div className="social-copy"><span className="section-kicker">Espaço para histórias reais</span><h2>Quem usa, <span>recomenda.</span></h2><p>Esta área será preenchida com depoimentos reais de clientes e profissionais do Ominify.</p><span className="placeholder-badge">Depoimentos em breve</span></div><div className="testimonial-placeholder"><MessageCircle size={27} /><strong>Seu depoimento pode aparecer aqui.</strong><span>Estamos construindo uma rede de confiança, uma conexão de cada vez.</span><div className="placeholder-lines"><i /><i /><i /></div></div></div></section>
+        <section className="social-section"><div className="container social-inner"><div className="social-copy"><span className="section-kicker">Espaço para histórias reais</span><h2>Quem usa, <span>recomenda.</span></h2><p>Histórias de quem encontrou a solução certa e de quem transformou seu talento em novas oportunidades.</p></div><div className="testimonial-carousel" onMouseEnter={() => setTestimonialPaused(true)} onMouseLeave={() => setTestimonialPaused(false)} onFocus={() => setTestimonialPaused(true)} onBlur={() => setTestimonialPaused(false)}><article className="testimonial-card" key={testimonials[activeTestimonial].name}><div className="testimonial-topline"><span className={testimonials[activeTestimonial].kind === 'Profissional' ? 'testimonial-kind pink-kind' : 'testimonial-kind'}>{testimonials[activeTestimonial].kind}</span><span className="testimonial-stars"><Star size={13} fill="currentColor" /> 5.0</span></div><div className="testimonial-person"><img src={testimonials[activeTestimonial].image} alt={`Foto ilustrativa de ${testimonials[activeTestimonial].name}`} /><span><strong>{testimonials[activeTestimonial].name}</strong><small>{testimonials[activeTestimonial].role}</small></span></div><p>“{testimonials[activeTestimonial].text}”</p></article><div className="testimonial-controls" aria-label="Selecionar depoimento">{testimonials.map((testimonial, index) => <button key={testimonial.name} className={index === activeTestimonial ? 'is-active' : ''} onClick={() => setActiveTestimonial(index)} aria-label={`Mostrar depoimento de ${testimonial.name}`} aria-current={index === activeTestimonial ? 'true' : undefined} />)}</div></div></div></section>
 
         <section className="faq-section"><div className="container faq-grid"><div className="faq-intro"><span className="section-kicker blue-kicker">Ficou com alguma dúvida?</span><h2>Temos respostas<br /><span>para você.</span></h2><p>Se não encontrar o que procura, fale com a gente.</p><a className="text-link" href="#rodape">Falar com o suporte <ArrowRight size={17} /></a></div><div className="faq-list">{faqs.map(([question, answer], index) => <div className={openFaq === index ? 'faq-item open' : 'faq-item'} key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>{question}</span><ChevronDown size={19} /></button>{openFaq === index && <p>{answer}</p>}</div>)}</div></div></section>
 
