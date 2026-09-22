@@ -55,7 +55,7 @@ const faqs: [string, string][] = [
   ['Posso oferecer mais de um tipo de serviço?', 'Sim. Profissionais podem criar seu perfil e divulgar diferentes serviços para alcançar mais clientes.'],
   ['Os serviços podem ser presenciais ou remotos?', 'Sim. Há espaço para serviços no local, em estabelecimentos e também para atendimentos remotos.'],
   ['Como começo a usar o Ominify?', 'Baixe o app, crie seu perfil e conte o que você precisa ou quais serviços oferece.'],
-  ['O aplicativo é gratuito para baixar?', 'O Ominify foi pensado para ser simples de começar. Consulte as condições atuais diretamente no aplicativo.'],
+  ['O aplicativo é gratuito para baixar?', 'Sim. O aplicativo é gratuito para baixar e criar uma conta. Clientes podem utilizar a plataforma gratuitamente para encontrar e contratar serviços. Profissionais também podem criar seu perfil e divulgar seus serviços gratuitamente, sendo cobrada uma comissão apenas sobre os serviços realizados por meio da plataforma.'],
 ];
 
 const testimonials = [
