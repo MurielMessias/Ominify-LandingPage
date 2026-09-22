@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/Ominify-LandingPage/' : '/',
+  base: '/Ominify-LandingPage/',
   plugins: [react()],
   resolve: {
     alias: {
