@@ -13,7 +13,7 @@ function PrivacyPage({ onBack }: Props) {
             <ArrowLeft size={18} /> Voltar ao site
           </a>
           <a href="#" onClick={(e) => { e.preventDefault(); onBack(); }} className="brand" aria-label="Ominify, início">
-            <span className="brand-mark"><img src="/images/adaptive-icon.svg" alt="" /></span>
+            <span className="brand-mark"><img src="/images/image copy 2.png" alt="" /></span>
             <span>Ominify<span className="brand-dot">.</span></span>
           </a>
         </div>
