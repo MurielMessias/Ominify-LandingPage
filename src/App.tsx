@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import PrivacyPage from '@/pages/PrivacyPage';
 import TermsPage from '@/pages/TermsPage';
+import SharedAdPage from '@/pages/SharedAdPage';
 
 const cleaningImage = 'https://images.pexels.com/photos/9462192/pexels-photo-9462192.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
 const repairImage = 'https://images.pexels.com/photos/5691503/pexels-photo-5691503.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
@@ -112,6 +113,7 @@ function App() {
   const ActiveNotificationIcon = activeNotification.Icon;
   const NextNotificationIcon = nextNotification.Icon;
 
+  if (window.location.pathname.startsWith('/provider-details')) return <SharedAdPage />;
   if (page === 'privacy') return <PrivacyPage onBack={() => setPage('home')} />;
   if (page === 'terms') return <TermsPage onBack={() => setPage('home')} />;
 
