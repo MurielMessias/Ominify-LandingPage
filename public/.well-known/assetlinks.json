@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ominify.app",
+      "sha256_cert_fingerprints": [
+        "0A:6F:E0:C9:CF:79:E3:77:B9:1E:B7:91:20:E5:2D:71:B6:80:27:BC:1B:8A:BD:55:61:13:9C:04:35:93:7C:28"
+      ]
+    }
+  }
+]
